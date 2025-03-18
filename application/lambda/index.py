@@ -14,6 +14,7 @@ def update_status(client, status):
             'status': status
         }
     )
+    print("State table updated")
     return
 
 
@@ -21,6 +22,7 @@ def send_alert(country, status):
     client = boto3.client('sns')
     message = "{} country is with current status: {}".format(country, status)
     client.publish(TopicArn=SNS_TOPIC, Subject="[WORK HOLIDAY VISA] Updates", Message=message)
+    print("SNS alert sent")
 
 
 def check_last(table_client):
@@ -41,7 +43,8 @@ def action_status(table_client):
 
             if country == DESIRED_COUNTRY:
                 if status == DESIRED_STATUS:
-                    send_alert()
+                    print("{} reached desired status: {}".format(country, status))
+                    send_alert(country, status)
                     update_status(table_client, status)
                 break
         except:
@@ -51,5 +54,6 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(TABLE_NAME)
     last_status = check_last(table)
+    print("Last status: {}".format(last_status))
     if last_status != DESIRED_STATUS:
         action_status(table)

@@ -41,3 +41,11 @@ A template for the config file will be found in `cdk/config`. Use this template 
 4. `npx cdk synth --profile <given_profile_name>` --> just to check for any AWS auth errors
 5. `npx cdk deploy --profile <given_profile_name>`
 
+## Costs
+
+- Lambda: 1 million **free** requests per month. Considering a month of 31 days (44640 minutes). If you run the schedule every 5min, you do almost 9 thousand requests in the month. Still plenty left
+- DynamoDB: 25 provisioned read and write capacity for **free**. Each request only requires 2 read capacity and maybe more for write if it gets updated
+- SNS: Up until 1k email deliveries and publishes for **free**
+- Eventbridge: 14 million schedule invocations **free** per month
+
+https://aws.amazon.com/free/
